@@ -22,6 +22,15 @@ YELLOW_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"
 # BACKGROUND
 BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIN_W, WIN_H))
 
+class Ship:
+    def __init__(self, x, y, health=100):
+        self.x = x
+        self.y = y
+        self.health = health
+        self.ship_img = None
+        self.lasers = []
+        self.cool_down_counter = 0
+
 def main():
     run = True
     FPS = 60
@@ -34,8 +43,8 @@ def main():
     def redraw_window():
         WIN.blit(BG, (0,0))
         # EXIBR TEXTO NA TELA
-        lives_label = main_font.render(f'Vidas:{lives}', 1, (255,255,255))
-        level_label = main_font.render(f'Nível:{level}', 1, (255,255,255))
+        lives_label = main_font.render(f'Vidas: {lives}', 1, (255,255,255))
+        level_label = main_font.render(f'Nível: {level}', 1, (255,255,255))
 
         WIN.blit(lives_label, (20, 20))
         WIN.blit(level_label, (WIN_W - level_label.get_width() - 20, 20))
