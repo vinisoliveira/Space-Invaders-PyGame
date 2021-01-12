@@ -55,8 +55,8 @@ class Enemy(Ship):
             'green':(GREEN_SPACE_SHIP, GREEN_LASER),
             'blue':(BLUE_SPACE_SHIP, BLUE_LASER)
     }
-    def __init__(self, x, y, color, heath = 100):
-        super().__init__(self, x, y, heath)
+    def __init__(self, x, y, color, health = 100):
+        super().__init__(x, y, health)
         self.ship_img, self.laser_img = self.COLOR_MAP[color]
         self.mask = pygame.mask.from_surface(self.ship_img)
 
@@ -74,6 +74,7 @@ def main():
 
     enemies = []
     wave_lenght = 5
+    enemy_vel = 1
 
     player = Player(325, 550)
 
@@ -88,13 +89,22 @@ def main():
         WIN.blit(lives_label, (20, 20))
         WIN.blit(level_label, (WIN_W - level_label.get_width() - 20, 20))
 
+        for enemy in enemies:
+            enemy.draw(WIN)
+
         player.draw(WIN)
 
         pygame.display.update()
 
     while run:
         clock.tick(FPS)
-        redraw_window()
+
+        if len(enemies) == 0:
+            level += 1
+            wave_lenght += 5
+            for i in range(wave_lenght):
+                enemy = Enemy(random.randrange(50, WIN_W - 100), random.randrange(-1000, -100), random.choice(['red', 'green', 'blue']))
+                enemies.append(enemy)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -109,5 +119,10 @@ def main():
             player.y -= player_vel
         if keys[pygame.K_a] or keys[pygame.K_DOWN] and player.y + player_vel + player.get_height() < WIN_H: # MOVER-SE PARA BAIXO
             player.y += player_vel
+
+        for enemy in enemies:
+            enemy.move(enemy_vel)
+
+        redraw_window()
 
 main()
