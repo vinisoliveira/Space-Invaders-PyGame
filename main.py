@@ -9,9 +9,9 @@ WIN = pygame.display.set_mode((WIN_W, WIN_H))
 pygame.display.set_caption('Space Invaders PyGame')
 
 # CARREGAR AS IMAGENS
-RED_SPACE_player = pygame.image.load(os.path.join("assets", "pixel_ship_red_small.png"))
-GREEN_SPACE_player = pygame.image.load(os.path.join("assets", "pixel_ship_green_small.png"))
-BLUE_SPACE_player = pygame.image.load(os.path.join("assets", "pixel_ship_blue_small.png"))
+RED_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_red_small.png"))
+GREEN_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_green_small.png"))
+BLUE_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_blue_small.png"))
 # NAVE DO JOGADOR
 YELLOW_SPACE_player = pygame.image.load(os.path.join("assets", "pixel_ship_yellow.png"))
 # LASERS
@@ -22,7 +22,7 @@ YELLOW_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"
 # BACKGROUND
 BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIN_W, WIN_H))
 
-class player:
+class Ship:
     def __init__(self, x, y, health=100):
         self.x = x
         self.y = y
@@ -41,7 +41,7 @@ class player:
     def get_height(self):
         return self.ship_img.get_height()
 
-class Player(player):
+class Player(Ship):
     def __init__(self, x, y, health = 100):
         super().__init__(x, y, health)
         self.ship_img = YELLOW_SPACE_player
@@ -49,14 +49,31 @@ class Player(player):
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
 
+class Enemy(Ship):
+    COLOR_MAP = {
+            'red':(RED_SPACE_SHIP, RED_LASER),
+            'green':(GREEN_SPACE_SHIP, GREEN_LASER),
+            'blue':(BLUE_SPACE_SHIP, BLUE_LASER)
+    }
+    def __init__(self, x, y, color, heath = 100):
+        super().__init__(self, x, y, heath)
+        self.ship_img, self.laser_img = self.COLOR_MAP[color]
+        self.mask = pygame.mask.from_surface(self.ship_img)
+
+    def move(self, vel):
+        self.y += vel
+
 
 def main():
     run = True
     FPS = 60
-    level = 1
+    level = 0
     lives = 3
     player_vel = 4
     main_font = pygame.font.SysFont("comicsans", 50)
+
+    enemies = []
+    wave_lenght = 5
 
     player = Player(325, 550)
 
