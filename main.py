@@ -27,20 +27,26 @@ class player:
         self.x = x
         self.y = y
         self.health = health
-        self.player_img = None
+        self.ship_img = None
         self.laser_img = None
         self.lasers = []
         self.cool_down_counter = 0
 
     def draw(self, window):
-        window.blit(self.player_img, (self.x, self.y))
+        window.blit(self.ship_img, (self.x, self.y))
+
+    def get_width(self):
+        return self.ship_img.get_width()
+
+    def get_height(self):
+        return self.ship_img.get_height()
 
 class Player(player):
     def __init__(self, x, y, health = 100):
         super().__init__(x, y, health)
-        self.player_img = YELLOW_SPACE_player
+        self.ship_img = YELLOW_SPACE_player
         self.laser_img = YELLOW_LASER
-        self.mask = pygame.mask.from_surface(self.player_img)
+        self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
 
 
@@ -80,11 +86,11 @@ def main():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] or keys[pygame.K_LEFT] and player.x - player_vel > 0: #MOVER-SE PARA A ESQUERDA
             player.x -= player_vel
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT] and player.x + player_vel + 50 < WIN_W: #MOVER-SE PARA DIREITA
+        if keys[pygame.K_d] or keys[pygame.K_RIGHT] and player.x + player_vel + player.get_width() < WIN_W: #MOVER-SE PARA DIREITA
             player.x += player_vel
         if keys[pygame.K_w] or keys[pygame.K_UP] and player.y - player_vel > 0: #MOVER-SE PARA CIMA
             player.y -= player_vel
-        if keys[pygame.K_a] or keys[pygame.K_DOWN] and player.y + player_vel + 50 < WIN_H: # MOVER-SE PARA BAIXO
+        if keys[pygame.K_a] or keys[pygame.K_DOWN] and player.y + player_vel + player.get_height() < WIN_H: # MOVER-SE PARA BAIXO
             player.y += player_vel
 
 main()
