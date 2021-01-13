@@ -71,6 +71,7 @@ def main():
     lives = 3
     player_vel = 4
     main_font = pygame.font.SysFont("comicsans", 50)
+    lost_font = pygame.font.SysFont("comicsans", 60)
 
     enemies = []
     wave_lenght = 5
@@ -79,6 +80,8 @@ def main():
     player = Player(325, 550)
 
     clock = pygame.time.Clock()
+
+    lost = False
     
     def redraw_window():
         WIN.blit(BG, (0,0))
@@ -94,10 +97,17 @@ def main():
 
         player.draw(WIN)
 
+        if lost:
+            lost_label = lost_font.render('Você Perdeu!', 1, (255,255,255))
+            WIN.blit(lost_label, (WIN_W/2 - lost_label.get_width()/2, 350))
+
         pygame.display.update()
 
     while run:
         clock.tick(FPS)
+
+        if lives <= 0 or player.health <= 0:
+            lost = True
 
         if len(enemies) == 0:
             level += 1
@@ -111,17 +121,24 @@ def main():
                 run = False
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_a] or keys[pygame.K_LEFT] and player.x - player_vel > 0: #MOVER-SE PARA A ESQUERDA
+        #MOVER-SE PARA A ESQUERDA
+        if keys[pygame.K_a] and player.x - player_vel > 0 or keys[pygame.K_LEFT] and player.x - player_vel > 0: 
             player.x -= player_vel
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT] and player.x + player_vel + player.get_width() < WIN_W: #MOVER-SE PARA DIREITA
+        #MOVER-SE PARA DIREITA
+        if keys[pygame.K_d] and player.x + player_vel + player.get_width() < WIN_W or keys[pygame.K_RIGHT] and player.x + player_vel + player.get_width() < WIN_W:
             player.x += player_vel
-        if keys[pygame.K_w] or keys[pygame.K_UP] and player.y - player_vel > 0: #MOVER-SE PARA CIMA
+        #MOVER-SE PARA CIMA
+        if keys[pygame.K_w]  and player.y - player_vel > 0 or keys[pygame.K_UP] and player.y - player_vel > 0: 
             player.y -= player_vel
-        if keys[pygame.K_a] or keys[pygame.K_DOWN] and player.y + player_vel + player.get_height() < WIN_H: # MOVER-SE PARA BAIXO
+        # MOVER-SE PARA BAIXO
+        if keys[pygame.K_s] and player.y + player_vel + player.get_height() < WIN_H or keys[pygame.K_DOWN] and player.y + player_vel + player.get_height() < WIN_H:
             player.y += player_vel
 
-        for enemy in enemies:
+        for enemy in enemies[:]:
             enemy.move(enemy_vel)
+            if enemy.y + enemy.get_height() > WIN_H:
+                lives -= 1
+                enemies.remove(enemy)
 
         redraw_window()
 
