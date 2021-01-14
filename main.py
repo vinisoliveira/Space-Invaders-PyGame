@@ -41,8 +41,6 @@ class Laser:
     def collision(self, obj):
         return collide(self, obj)
 
-
-
 class Ship:
     COOLDOWN = 30
 
@@ -96,17 +94,17 @@ class Player(Ship):
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
 
-        def move_lasers(self, vel, objs):
-            self.cooldown()
-            for laser in self.lasers:
-                laser.move(vel)
-                if laser.off_screen(WIN_H):
-                    self.lasers.remove(laser)
-                else:
-                    for obj in objs:
-                        if laser.collide(obj):
-                            objs.remove(obj)
-                            self.lasers.remove(laser)
+    def move_lasers(self, vel, objs):
+        self.cooldown()
+        for laser in self.lasers:
+            laser.move(vel)
+            if laser.off_screen(WIN_H):
+                self.lasers.remove(laser)
+            else:
+                for obj in objs:
+                    if laser.collide(obj):
+                        objs.remove(obj)
+                        self.lasers.remove(laser)
 
 class Enemy(Ship):
     COLOR_MAP = {
@@ -121,6 +119,7 @@ class Enemy(Ship):
 
     def move(self, vel):
         self.y += vel
+
 
 def collide(obj1, obj2):
     offset_x = obj2.x - obj1.x
