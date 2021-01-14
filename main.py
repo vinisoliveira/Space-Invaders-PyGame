@@ -102,9 +102,10 @@ class Player(Ship):
                 self.lasers.remove(laser)
             else:
                 for obj in objs:
-                    if laser.collide(obj):
+                    if laser.collision(obj):
                         objs.remove(obj)
-                        self.lasers.remove(laser)
+                        if laser in self.lasers:
+                            self.lasers.remove(laser)
 
 class Enemy(Ship):
     COLOR_MAP = {
@@ -216,7 +217,7 @@ def main():
             if random.randrange(0, 2*60) == 1:
                 enemy.shoot()
 
-            if enemy.y + enemy.get_height() > WIN_H:
+            elif enemy.y + enemy.get_height() > WIN_H:
                 lives -= 1
                 enemies.remove(enemy)
             
