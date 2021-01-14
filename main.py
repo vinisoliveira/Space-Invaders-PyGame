@@ -118,6 +118,12 @@ class Enemy(Ship):
         self.ship_img, self.laser_img = self.COLOR_MAP[color]
         self.mask = pygame.mask.from_surface(self.ship_img)
 
+    def shoot(self):
+        if self.cool_down_counter == 0:
+            laser = Laser(self.x - 12, self.y, self.laser_img)
+            self.lasers.append(laser)
+            self.cool_down_counter = 1
+
     def move(self, vel):
         self.y += vel
 
@@ -216,6 +222,10 @@ def main():
 
             if random.randrange(0, 2*60) == 1:
                 enemy.shoot()
+
+            if collide(enemy, player):
+                player.health -= 10
+                enemies.remove(enemy)
 
             elif enemy.y + enemy.get_height() > WIN_H:
                 lives -= 1
