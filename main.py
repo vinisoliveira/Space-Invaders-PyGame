@@ -22,6 +22,26 @@ YELLOW_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"
 # BACKGROUND
 BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIN_W, WIN_H))
 
+class Laser:
+    def __init__(self, x, y, img):
+        self.x = x
+        self.y = y
+        self.img = img
+        self.mask = pygame.mask.from_surface(self.img)
+    
+    def draw(self, window):
+        window.blit(self.img, (self.x, self.y))
+
+    def move(self, vel):
+        self.y += vel
+
+    def off_screen(self, height):
+        return self.y <= height and self.y >= 0
+
+    def collison(self, obj):
+        return collide(obj, self)
+
+
 class Ship:
     def __init__(self, x, y, health=100):
         self.x = x
@@ -63,6 +83,11 @@ class Enemy(Ship):
     def move(self, vel):
         self.y += vel
 
+def collide(obj1, obj2):
+    offset_x = obj2.x - obj1.x
+    offset_y = obj2.y - obj1.y
+    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
+
 
 def main():
     run = True
@@ -82,6 +107,7 @@ def main():
     clock = pygame.time.Clock()
 
     lost = False
+    lost_count = 0
     
     def redraw_window():
         WIN.blit(BG, (0,0))
@@ -99,15 +125,23 @@ def main():
 
         if lost:
             lost_label = lost_font.render('Você Perdeu!', 1, (255,255,255))
-            WIN.blit(lost_label, (WIN_W/2 - lost_label.get_width()/2, 350))
+            WIN.blit(lost_label, (WIN_W/2 - lost_label.get_width()/2, 300))
 
         pygame.display.update()
 
     while run:
         clock.tick(FPS)
+        redraw_window()
 
         if lives <= 0 or player.health <= 0:
             lost = True
+            lost_count += 1
+
+        if lost:
+            if lost_count > FPS * 3:
+                run = False
+            else:
+                continue
 
         if len(enemies) == 0:
             level += 1
@@ -139,7 +173,5 @@ def main():
             if enemy.y + enemy.get_height() > WIN_H:
                 lives -= 1
                 enemies.remove(enemy)
-
-        redraw_window()
 
 main()
