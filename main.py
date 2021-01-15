@@ -81,6 +81,8 @@ class Ship:
             laser = Laser(self.x, self.y, self.laser_img)
             self.lasers.append(laser)
             self.cool_down_counter = 1
+            mixer.music.load('assets/sounds/laser-gun2.wav')
+            mixer.music.play()
 
     def get_width(self):
         return self.ship_img.get_width()
@@ -224,9 +226,7 @@ def main():
             player.y += player_vel
         #ATIRAR
         if keys[pygame.K_SPACE]:
-            player.shoot()
-            pygame.mixer.init()
-            mixer.music.load()
+            player.shoot()            
 
         for enemy in enemies[:]:
             enemy.move(enemy_vel)
