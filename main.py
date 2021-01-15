@@ -2,7 +2,7 @@ import pygame
 import os
 import time
 import random
-
+from pygame import mixer
 from pygame.constants import QUIT
 pygame.font.init()
 
@@ -207,7 +207,7 @@ def main():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                quit()
 
         keys = pygame.key.get_pressed()
         #MOVER-SE PARA A ESQUERDA
@@ -246,7 +246,11 @@ def main():
 def main_menu():
     title_font = pygame.font.SysFont('comicsans', 70)
     run = True
+    pygame.mixer.init()
+    mixer.music.load('assets/sounds/Space_Invaders_theme.wav')
+    mixer.music.play(-1)
     while run:
+
         WIN.blit(BG, (0,0))
         title_label = title_font.render('Clique para começar', 1, (255,255,255))
         WIN.blit(title_label, (WIN_W/2 - title_label.get_width()/2, 300))
@@ -256,6 +260,7 @@ def main_menu():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                mixer.music.stop()
                 main()
     quit()
 
