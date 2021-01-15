@@ -150,6 +150,9 @@ def collide(obj1, obj2):
     return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
 
 def main():
+    mixer.music.load('assets/sounds/Space-Invaders-Gameplay.wav')
+    mixer.music.play(-1)
+
     run = True
     FPS = 60
     level = 0
