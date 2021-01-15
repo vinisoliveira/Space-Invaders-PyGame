@@ -195,6 +195,8 @@ def main():
         redraw_window()
 
         if lives <= 0 or player.health <= 0:
+            mixer.music.load('assets/sounds/explosion-hit2.wav')
+            mixer.music.play()
             lost = True
             lost_count += 1
 
@@ -241,6 +243,8 @@ def main():
 
             if collide(enemy, player):
                 player.health -= 10
+                mixer.music.load('assets/sounds/shock-impact.wav')
+                mixer.music.play()
                 enemies.remove(enemy)
 
             elif enemy.y + enemy.get_height() > WIN_H:
