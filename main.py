@@ -225,6 +225,8 @@ def main():
         #ATIRAR
         if keys[pygame.K_SPACE]:
             player.shoot()
+            pygame.mixer.init()
+            mixer.music.load()
 
         for enemy in enemies[:]:
             enemy.move(enemy_vel)
