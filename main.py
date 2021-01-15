@@ -67,6 +67,8 @@ class Ship:
             if laser.off_screen(WIN_H):
                 self.lasers.remove(laser)
             elif laser.collision(obj):
+                mixer.music.load('assets/sounds/shock-impact.wav')
+                mixer.music.play()
                 obj.health -= 10
                 self.lasers.remove(laser)
 
