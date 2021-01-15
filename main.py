@@ -108,6 +108,8 @@ class Player(Ship):
                 for obj in objs:
                     if laser.collision(obj):
                         objs.remove(obj)
+                        mixer.music.load('assets/sounds/explosion-hit.wav')
+                        mixer.music.play()
                         if laser in self.lasers:
                             self.lasers.remove(laser)
                         
