@@ -234,7 +234,7 @@ def main():
         if keys[pygame.K_s] and player.y + player_vel + player.get_height() + 15 < WIN_H or keys[pygame.K_DOWN] and player.y + player_vel + player.get_height() + 15 < WIN_H:
             player.y += player_vel
         #ATIRAR
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE] or keys[pygame.K_KP_ENTER]:
             player.shoot()            
 
         for enemy in enemies[:]:
